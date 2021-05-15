@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, BackHandler, Clipboard } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { Provider as PaperProvider, Appbar, DataTable, TextInput, IconButton, HelperText, Switch, Button, Subheading } from 'react-native-paper';
+import { Provider as PaperProvider, Appbar, DataTable, TextInput, IconButton, HelperText, Switch, Button, Subheading, BottomNavigation } from 'react-native-paper';
 
 export default App = () => {
   const [vin, setVin] = useState("");
@@ -36,7 +36,7 @@ export default App = () => {
         <DataTable.Header>
             <DataTable.Title>Param</DataTable.Title>
             <DataTable.Title>Value</DataTable.Title>
-            <DataTable.Title>Copy</DataTable.Title>
+            <DataTable.Title style={{flexDirection:"row", justifyContent: "flex-end", paddingRight: 10}}>Copy</DataTable.Title>
         </DataTable.Header>
     );
   };
@@ -47,7 +47,10 @@ export default App = () => {
             <DataTable.Row key={item.VariableId}>
                 <DataTable.Cell>{item.Variable}</DataTable.Cell>
                 <DataTable.Cell>{item.Value}</DataTable.Cell>
-                <DataTable.Cell onPress={() => { copy(item.Value, item.Variable) }}>
+                <DataTable.Cell
+                    onPress={() => { copy(item.Value, item.Variable) }}
+                     style={{flexDirection:"row", justifyContent: "flex-end"}}
+                >
                     <IconButton
                         icon="clipboard-check"
                         size={30}
@@ -114,26 +117,29 @@ export default App = () => {
 
   const getVinInfo = () => {
     setVinErr(false);
-    if (vin.length != 17) {
-        setVinErr(true);
-        return
-    }
+//    if (vin.length != 17) {
+//        setVinErr(true);
+//        return
+//    }
 
-    fetch("https://vin-vehicle-identification-number-lookup.p.rapidapi.com/search_vin?vin=" + vin, {
-      "method": "GET",
-      "headers": {
-        "x-rapidapi-key": "aa1c62a434msh161b9b06fc45bf6p1a1bcdjsn64e6f3b43065",
-        "x-rapidapi-host": "vin-vehicle-identification-number-lookup.p.rapidapi.com"
-      }
-    })
-    .then(response => response.json())
-    .then(response => {
-        setPages(calculatePages(response.responseVinData.Results));
-        return setVinList(response.responseVinData.Results)
-    })
-    .catch(err => {
-      console.error(err);
-    });
+        setPages(calculatePages(testData));
+        return setVinList(testData)
+
+//    fetch("https://vin-vehicle-identification-number-lookup.p.rapidapi.com/search_vin?vin=" + vin, {
+//      "method": "GET",
+//      "headers": {
+//        "x-rapidapi-key": "aa1c62a434msh161b9b06fc45bf6p1a1bcdjsn64e6f3b43065",
+//        "x-rapidapi-host": "vin-vehicle-identification-number-lookup.p.rapidapi.com"
+//      }
+//    })
+//    .then(response => response.json())
+//    .then(response => {
+//        setPages(calculatePages(response.responseVinData.Results));
+//        return setVinList(response.responseVinData.Results)
+//    })
+//    .catch(err => {
+//      console.error(err);
+//    });
   }
 
   useEffect(() => {
